@@ -1,5 +1,5 @@
 services:
-  postgres:
+  db:
     image: postgres:latest
     container_name: postgres-db
     environment:
@@ -17,9 +17,24 @@ services:
     container_name: pgadmin
     environment:
       PGADMIN_DEFAULT_EMAIL: ${POSTGRES_USER}  
-      PGADMIN_DEFAULT_PASSWORD: ${POSTGRES_PASSWORD}   
+      PGADMIN_DEFAULT_PASSWORD: ${POSTGRES_PASSWORD} 
+      PGADMIN_LISTEN_PORT: ${PGADMIN_DEF_PORT}
     ports:
-      - "8080:80" 
+      - ${PGADMIN_PORT_MAPPING}
+    networks:
+      - fosku-network
+  server:
+    image: fosku-server
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    ports:
+      - "80:8080"
+    depends_on:
+      - db
+    entrypoint: ["sh", "-c", "dotnet ef database update && dotnet fosku-server.dll"]
     networks:
       - fosku-network
 
