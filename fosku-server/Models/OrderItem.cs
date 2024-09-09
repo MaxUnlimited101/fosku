@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Runtime.InteropServices.Marshalling;
 using System.Text;
@@ -11,14 +12,16 @@ namespace Fosku.Models
     public class OrderItem
     {
         [Key]
-        public uint Id { get; set; }
+        public int Id { get; set; }
         [Required]
-        public uint OrderId { get; set; }
+        public int OrderId { get; set; }
+        public Order Order { get; set; }
         [Required]
-        public uint ProductId { get; set; }
+        public int ProductId { get; set; }
+        public Product Product { get; set; }
         [Required]
-        public uint Quantity { get; set; }
+        public int Quantity { get; set; }
         [Required]
-        public uint UnitPrice { get; set; }
+        public int UnitPrice { get; set; }
     }
 }

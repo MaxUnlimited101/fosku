@@ -10,9 +10,11 @@ namespace Fosku.Models
     public class PaymentMethod
     {
         [Key]
-        public uint Id { get; set; }
+        public int Id { get; set; }
         [Required]
-        public uint UserId { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
+        [MaxLength(20)]
         public string CardNumber { get; set; }
         /// <summary>
         /// 0 - cash;<br />
@@ -20,8 +22,9 @@ namespace Fosku.Models
         /// otherwise something else
         /// </summary>
         [Required]
-        public uint CardType { get; set; }
+        public int CardType { get; set; }
         public DateOnly ExpiryDate { get; set; }
+        [MaxLength(200)]
         public string BillingAddress { get; set; }
     }
 }

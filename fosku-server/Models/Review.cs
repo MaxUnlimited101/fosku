@@ -10,14 +10,17 @@ namespace Fosku.Models
     public class Review
     {
         [Key]
-        public uint Id { get; set; }
+        public int Id { get; set; }
         [Required]
-        public uint UserId { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
         [Required]
-        public uint ProductId { get; set; }
+        public int ProductId { get; set; }
+        public Product Product { get; set; }
         [Required]
         [Range(1, 5, MaximumIsExclusive = false, MinimumIsExclusive = false)]
-        public uint Rating { get; set; }
+        public int Rating { get; set; }
+        [MaxLength(400)]
         public string Comment { get; set; }
         [Required]
         public DateOnly CreatedAt { get; set; }

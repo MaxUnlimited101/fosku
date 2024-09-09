@@ -10,9 +10,9 @@ namespace Fosku.Models
     public class ShoppingCart
     {
         [Key]
-        public uint Id { get; set; }
-        [Required]
-        public uint UserId { get; set; }
+        public int Id { get; set; }
+        public int? UserId { get; set; }
+        public User? User { get; set; } = null!;
         [Required]
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }

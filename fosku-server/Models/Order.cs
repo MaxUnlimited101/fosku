@@ -14,20 +14,22 @@ namespace Fosku.Models
         [Required]
         public DateTime OrderDate { get; set; }
         [Required]
-        public uint TotalAmount { get; set; }
+        public int TotalAmount { get; set; }
         [Required]
-        public uint UserId { get; set; }
+        public int UserId { get; set; }
+        public User User { get; set; }
         [Required]
+        [MaxLength(200)]
         public string ShippingAddress { get; set; }
         /// <summary>
         /// TODO: think this out
         /// </summary>
         [Required]
-        public uint OrderStatus { get; set; }
+        public int OrderStatus { get; set; }
         /// <summary>
         /// TODO: think this out as well
         /// </summary>
         [Required]
-        public uint PaymentStatus { get; set; }
+        public int PaymentStatus { get; set; }
     }
 }

@@ -10,10 +10,13 @@ namespace Fosku.Models
     public class Category
     {
         [Key]
-        public uint Id { get; set; }
+        public int Id { get; set; }
         [Required]
+        [MaxLength(100)]
         public string Name { get; set; }
+        [MaxLength(400)]
         public string Description { get; set; }
-        public uint ParentCategoryId { get; set; }
+        public int ParentCategoryId { get; set; }
+        public Category ParentCategory { get; set; }
     }
 }

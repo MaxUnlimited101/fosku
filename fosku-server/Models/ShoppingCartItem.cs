@@ -10,12 +10,14 @@ namespace Fosku.Models
     public class ShoppingCartItem
     {
         [Key]
-        public uint Id { get; set; }
+        public int Id { get; set; }
         [Required]
-        public uint CartId { get; set; }
+        public int CartId { get; set; }
+        public ShoppingCart ShoppingCart { get; set; }
         [Required]
-        public uint ProductId { get; set; }
+        public int ProductId { get; set; }
+        public Product Product { get; set; }
         [Required]
-        public uint Quantity { get; set; }
+        public int Quantity { get; set; }
     }
 }

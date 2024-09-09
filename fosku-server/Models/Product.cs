@@ -10,14 +10,16 @@ namespace Fosku.Models
     public class Product
     {
         [Key]
-        public uint Id { get; set; }
+        public int Id { get; set; }
         [Required]
+        [MaxLength(100)]
         public string Name { get; set; }
+        [MaxLength(1000)]
         public string Description { get; set; }
         public float Price { get; set; }
-        public uint StockQuantity { get; set; }
-        public uint CategoryId { get; set; }
+        public int StockQuantity { get; set; }
         [Required]
-        public uint ProductImageId { get; set; }
+        public int CategoryId { get; set; }
+        public Category Category { get; set; }
     }
 }

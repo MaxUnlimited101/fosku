@@ -12,6 +12,12 @@ services:
       - "5432:5432"
     networks:
       - fosku-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
   pgadmin:
     image: dpage/pgadmin4:latest
     container_name: pgadmin
@@ -33,10 +39,12 @@ services:
     ports:
       - "80:8080"
     depends_on:
-      - db
-    entrypoint: ["sh", "-c", "dotnet ef database update && dotnet fosku-server.dll"]
+      db:
+        condition: service_healthy
+        restart: true
     networks:
       - fosku-network
+
 
 networks:
   fosku-network:
