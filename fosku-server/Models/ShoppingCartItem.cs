@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fosku.Models
+namespace fosku_server.Models
 {
-    public class ShoppingCartItem
+    public class ShoppingCartItem : IFoskuModel
     {
         [Key]
         public int Id { get; set; }

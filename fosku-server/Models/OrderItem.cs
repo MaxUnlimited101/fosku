@@ -7,9 +7,9 @@ using System.Runtime.InteropServices.Marshalling;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fosku.Models
+namespace fosku_server.Models
 {
-    public class OrderItem
+    public class OrderItem : IFoskuModel
     {
         [Key]
         public int Id { get; set; }

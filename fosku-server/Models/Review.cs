@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fosku.Models
+namespace fosku_server.Models
 {
-    public class Review
+    public class Review : IFoskuModel
     {
         [Key]
         public int Id { get; set; }
         [Required]
         public int UserId { get; set; }
-        public User User { get; set; }
+        public Customer Customer { get; set; }
         [Required]
         public int ProductId { get; set; }
         public Product Product { get; set; }

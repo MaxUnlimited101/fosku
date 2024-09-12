@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fosku.Models
+namespace fosku_server.Models
 {
-    public class Order
+    public class Order : IFoskuModel
     {
         [Key]
         public int Id { get; set; }
@@ -17,7 +17,7 @@ namespace Fosku.Models
         public int TotalAmount { get; set; }
         [Required]
         public int UserId { get; set; }
-        public User User { get; set; }
+        public Customer Customer { get; set; }
         [Required]
         [MaxLength(200)]
         public string ShippingAddress { get; set; }

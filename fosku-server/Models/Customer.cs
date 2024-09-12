@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Fosku.Models
+namespace fosku_server.Models
 {
-    public class User
+    public class Customer : IFoskuModel
     {
         [Key]
         public int Id { get; set; }
@@ -18,6 +18,9 @@ namespace Fosku.Models
         [Required]
         [MaxLength(100)]
         public string Email { get; set; }
+        /// <summary>
+        /// SHA256 hash
+        /// </summary>
         [Required]
         [MaxLength(50)]
         public string PasswordHash { get; set; }

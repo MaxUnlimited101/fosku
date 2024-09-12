@@ -1,4 +1,4 @@
-﻿using Fosku.Models;
+﻿using fosku_server.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace fosku_server.Data
@@ -14,7 +14,7 @@ namespace fosku_server.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<ShoppingCart> ShoppingCarts { get; set; }
         public DbSet<ShoppingCartItem> ShoppingCartItems { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<Customer> Customers { get; set; }
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
     }
