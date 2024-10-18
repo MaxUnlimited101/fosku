@@ -3,6 +3,7 @@ using fosku_server.Data;
 using fosku_server.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -37,65 +38,66 @@ namespace fosku_server
 
         private static void ConfigureEndpoints(WebApplication app)
         {
-            app.MapGet("/", (HttpContext context) =>
+            // may be used like a health check
+            app.MapGet("/", () => Results.Ok());
+
+            #region login & auth (not done)
+            //app.MapPost("/login", async ([FromBody] CustomerLoginModel login, AppDbContext db) =>
+            //{
+            //    try
+            //    {
+            //        db.Customers.First(x => x.Email == login.Email && x.PasswordHash == login.PasswordHash);
+            //    }
+            //    catch (InvalidOperationException)
+            //    {
+            //        return Results.Unauthorized();
+            //    }
+            //    var tokenHandler = new JwtSecurityTokenHandler();
+            //    var key = Encoding.ASCII.GetBytes(Env.GetString("JWT_SECRET_KEY"));
+            //    var tokenDescriptor = new SecurityTokenDescriptor
+            //    {
+            //        Subject = new ClaimsIdentity(new Claim[]
+            //        {
+            //            new Claim(ClaimTypes.Email, login.Email)
+            //        }),
+            //        Expires = DateTime.UtcNow.AddHours(1),
+            //        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            //    };
+            //    var token = tokenHandler.CreateToken(tokenDescriptor);
+            //    var tokenString = tokenHandler.WriteToken(token);
+
+            //    return Results.Ok(new { Token = tokenString });
+            //});
+
+            //app.MapPost("/signup", async ([FromBody] CustomerLoginModel login, AppDbContext db) =>
+            //{
+            //    var tokenHandler = new JwtSecurityTokenHandler();
+            //    var key = Encoding.ASCII.GetBytes(Env.GetString("JWT_SECRET_KEY"));
+            //    var tokenDescriptor = new SecurityTokenDescriptor
+            //    {
+            //        Subject = new ClaimsIdentity(new Claim[]
+            //        {
+            //            new Claim(ClaimTypes.Email, login.Email)
+            //        }),
+            //        Expires = DateTime.UtcNow.AddYears(200),
+            //        SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            //    };
+            //    var token = tokenHandler.CreateToken(tokenDescriptor);
+            //    var tokenString = tokenHandler.WriteToken(token);
+
+            //    return Results.Ok(new { Token = tokenString });
+            //});
+            #endregion
+
+            app.MapGet("/customers", async (AppDbContext db) => await db.Customers.ToListAsync());
+
+            app.MapGet("/customers/{id}", async (int id, AppDbContext db) =>
             {
-                return "OK, but wrong link.";
-            });
-
-            app.MapGet("/login", async (CustomerLoginModel login, AppDbContext db) =>
-            {
-                try
-                {
-                    db.Customers.First(x => x.Email == login.Email && x.PasswordHash == login.PasswordHash);
-                }
-                catch (InvalidOperationException)
-                {
-                    return Results.Unauthorized();
-                }
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(Env.GetString("JWT_SECRET_KEY"));
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new Claim[]
-                    {
-                        new Claim(ClaimTypes.Email, login.Email)
-                    }),
-                    Expires = DateTime.UtcNow.AddHours(1),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var tokenString = tokenHandler.WriteToken(token);
-
-                return Results.Ok(new { Token = tokenString });
-            });
-
-            app.MapPost("/login", async (CustomerLoginModel login, AppDbContext db) =>
-            {
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var key = Encoding.ASCII.GetBytes(Env.GetString("JWT_SECRET_KEY"));
-                var tokenDescriptor = new SecurityTokenDescriptor
-                {
-                    Subject = new ClaimsIdentity(new Claim[]
-                    {
-                        new Claim(ClaimTypes.Email, login.Email)
-                    }),
-                    Expires = DateTime.UtcNow.AddYears(200),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-                };
-                var token = tokenHandler.CreateToken(tokenDescriptor);
-                var tokenString = tokenHandler.WriteToken(token);
-
-                return Results.Ok(new { Token = tokenString });
-            });
-
-            app.MapGet("/customers", [Authorize] async (AppDbContext db) => await db.Customers.ToListAsync());
-
-            app.MapGet("/customers/{id}", [Authorize] async (int id, AppDbContext db) =>
-            {
+                // TODO: fix for customer not found
                 return await db.Customers.FirstAsync(x => x.Id == id);
             });
 
-            app.MapPost("/customers", [Authorize] async (Customer customer, AppDbContext db) =>
+            app.MapPost("/customers", async (Customer customer, AppDbContext db) =>
             {
                 var handle = db.Customers.Add(customer);
                 await db.SaveChangesAsync();
@@ -104,34 +106,34 @@ namespace fosku_server
 
             app.MapGet("/categories", async (AppDbContext db) => await db.Categories.ToListAsync());
 
-            app.MapPost("/categories", [Authorize] async (Category category, AppDbContext db) => 
+            app.MapPost("/categories", async (Category category, AppDbContext db) => 
             {
                 var handle = db.Categories.Add(category);
                 await db.SaveChangesAsync();
                 return Results.Created($"/orders/{handle.Entity.Id}", handle.Entity);
             });
 
-            app.MapGet("/orders", [Authorize] async (AppDbContext db) => await db.Orders.ToListAsync());
+            app.MapGet("/orders", async (AppDbContext db) => await db.Orders.ToListAsync());
 
-            app.MapPost("/orders", [Authorize] async (Order order, AppDbContext db) =>
+            app.MapPost("/orders", async (Order order, AppDbContext db) =>
             {
                 var handle = db.Orders.Add(order);
                 await db.SaveChangesAsync();
                 return Results.Created($"/orders/{handle.Entity.Id}", handle.Entity);
             });
 
-            app.MapGet("/orderitems", [Authorize] async (AppDbContext db) => await db.Categories.ToListAsync());
+            app.MapGet("/orderitems", async (AppDbContext db) => await db.Categories.ToListAsync());
 
-            app.MapPost("/orderitems", [Authorize] async (OrderItem orderItem, AppDbContext db) =>
+            app.MapPost("/orderitems", async (OrderItem orderItem, AppDbContext db) =>
             {
                 var handle = db.OrderItems.Add(orderItem);
                 await db.SaveChangesAsync();
                 return Results.Created($"/orders/{handle.Entity.Id}", handle.Entity);
             });
 
-            app.MapGet("/paymentmethods", [Authorize] async (AppDbContext db) => await db.Categories.ToListAsync());
+            app.MapGet("/paymentmethods", async (AppDbContext db) => await db.Categories.ToListAsync());
 
-            app.MapPost("/paymentmethods", [Authorize] async (PaymentMethod pm, AppDbContext db) =>
+            app.MapPost("/paymentmethods", async (PaymentMethod pm, AppDbContext db) =>
             {
                 var handle = db.PaymentMethods.Add(pm);
                 await db.SaveChangesAsync();
@@ -140,7 +142,7 @@ namespace fosku_server
 
             app.MapGet("/products", async (AppDbContext db) => await db.Categories.ToListAsync());
 
-            app.MapPost("/products", [Authorize] async (Product p, AppDbContext db) =>
+            app.MapPost("/products", async (Product p, AppDbContext db) =>
             {
                 var handle = db.Products.Add(p);
                 await db.SaveChangesAsync();
@@ -149,7 +151,7 @@ namespace fosku_server
 
             app.MapGet("/productimages", async (AppDbContext db) => await db.Categories.ToListAsync());
 
-            app.MapPost("/productimages", [Authorize] async (ProductImage pi, AppDbContext db) =>
+            app.MapPost("/productimages", async (ProductImage pi, AppDbContext db) =>
             {
                 var handle = db.ProductImages.Add(pi);
                 await db.SaveChangesAsync();
@@ -158,25 +160,25 @@ namespace fosku_server
 
             app.MapGet("/reviews", async (AppDbContext db) => await db.Categories.ToListAsync());
 
-            app.MapPost("/reviews", [Authorize] async (Review review, AppDbContext db) =>
+            app.MapPost("/reviews", async (Review review, AppDbContext db) =>
             {
                 var handle = db.Reviews.Add(review);
                 await db.SaveChangesAsync();
                 return Results.Created($"/orders/{handle.Entity.Id}", handle.Entity);
             });
 
-            app.MapGet("/shoppingcarts", [Authorize] async (AppDbContext db) => await db.Categories.ToListAsync());
+            app.MapGet("/shoppingcarts", async (AppDbContext db) => await db.Categories.ToListAsync());
 
-            app.MapPost("/shoppingcarts", [Authorize] async (ShoppingCart sp, AppDbContext db) =>
+            app.MapPost("/shoppingcarts", async (ShoppingCart sp, AppDbContext db) =>
             {
                 var handle = db.ShoppingCarts.Add(sp);
                 await db.SaveChangesAsync();
                 return Results.Created($"/orders/{handle.Entity.Id}", handle.Entity);
             });
 
-            app.MapGet("/shoppingcartitems", [Authorize] async (AppDbContext db) => await db.Categories.ToListAsync());
+            app.MapGet("/shoppingcartitems", async (AppDbContext db) => await db.Categories.ToListAsync());
 
-            app.MapPost("/shoppingcartitems", [Authorize] async (ShoppingCartItem spitem, AppDbContext db) =>
+            app.MapPost("/shoppingcartitems", async (ShoppingCartItem spitem, AppDbContext db) =>
             {
                 var handle = db.ShoppingCartItems.Add(spitem);
                 await db.SaveChangesAsync();
@@ -219,6 +221,9 @@ namespace fosku_server
 
             services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(Env.GetString("ConnectionStrings__DefaultConnection")));
+
+            services.AddAuthentication();
+            services.AddAuthorization();
         }
 
         private static void ConfigureMiddleware(WebApplication app)
