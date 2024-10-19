@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './footer.css'
 
 export const Footer = () => (
@@ -7,6 +8,7 @@ export const Footer = () => (
         <a href="#facebook">Facebook</a>
         <a href="#instagram">Instagram</a>
         <a href="#twitter">Twitter</a>
+        <Link to="/admin">For admins</Link>
       </div>
     </footer>
   );

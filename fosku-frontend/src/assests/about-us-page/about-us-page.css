@@ -1,0 +1,72 @@
+/* AboutUsPage.css */
+.about-us-page {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  header {
+    text-align: center;
+    padding-bottom: 20px;
+  }
+  
+  .about-us-content {
+    max-width: 1000px;
+    margin: 0 auto;
+  }
+  
+  .company-overview, .mission-values {
+    margin-bottom: 40px;
+  }
+  
+  h2 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+  }
+  
+  p {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  
+  .mission-values ul {
+    list-style-type: none;
+    padding-left: 0;
+  }
+  
+  .mission-values ul li {
+    margin-bottom: 10px;
+    font-size: 1rem;
+  }
+  
+  .team-section {
+    margin-top: 40px;
+  }
+  
+  .team-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .team-member {
+    text-align: center;
+    width: 150px;
+  }
+  
+  .team-member img {
+    border-radius: 50%;
+    width: 150px;
+    height: 150px;
+  }
+  
+  .team-member h3 {
+    font-size: 1.2rem;
+    margin: 10px 0 5px;
+  }
+  
+  .team-member p {
+    font-size: 1rem;
+    color: #666;
+  }
+  

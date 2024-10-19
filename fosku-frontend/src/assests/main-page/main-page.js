@@ -1,8 +1,7 @@
 // MainPage.js
-import React from 'react';
-import './main-page.css';
-import Header from './header';
-import Footer from './footer'
+import React from "react";
+import "./main-page.css";
+import PageWrapper from "../page-wrapper/page-wrapper";
 
 // Components
 
@@ -58,13 +57,13 @@ const FeaturedProducts = () => (
 
 const MainPage = () => {
   return (
-    <div className="main-page">
-      <Header />
-      <HeroSection />
-      <ProductCategories />
-      <FeaturedProducts />
-      <Footer />
-    </div>
+    <PageWrapper>
+      <div className="main-page">
+        <HeroSection />
+        <ProductCategories />
+        <FeaturedProducts />
+      </div>
+    </PageWrapper>
   );
 };
 
