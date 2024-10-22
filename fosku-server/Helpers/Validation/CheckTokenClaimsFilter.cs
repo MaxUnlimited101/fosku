@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.WebUtilities;
 using fosku_server.Services.Auth;
 
-namespace SharperExpenser.Helpers.Validation;
+namespace fosku_server.Helpers.Validation;
 
 public class CheckTokenClaimsFilter : Attribute, IAsyncResourceFilter
 {

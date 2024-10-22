@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using fosku_server.Helpers;
 
 namespace fosku_server.Models
 {
@@ -27,16 +28,7 @@ namespace fosku_server.Models
         [MaxLength(200)]
         public string ShippingAddress { get; set; }
 
-        /// <summary>
-        /// TODO: think this out
-        /// </summary>
         [Required]
-        public int OrderStatus { get; set; }
-        
-        /// <summary>
-        /// TODO: think this out as well
-        /// </summary>
-        [Required]
-        public int PaymentStatus { get; set; }
+        public OrderStatusEnum OrderStatus { get; set; }
     }
 }

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+//TODO: decide if i wanna add reviews
+
 namespace fosku_server.Models
 {
     public class Review : IFoskuModel
