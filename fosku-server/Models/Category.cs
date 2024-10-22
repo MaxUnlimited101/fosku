@@ -11,12 +11,16 @@ namespace fosku_server.Models
     {
         [Key]
         public int Id { get; set; }
+
         [Required]
         [MaxLength(100)]
         public string Name { get; set; }
+        
         [MaxLength(400)]
         public string Description { get; set; }
+
         public int ParentCategoryId { get; set; }
+
         public Category ParentCategory { get; set; }
     }
 }

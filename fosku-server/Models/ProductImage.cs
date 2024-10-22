@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace fosku_server.Models
 {
+    /// <summary>
+    /// This is used for the relation "1 product - many images"
+    /// </summary>
     public class ProductImage : IFoskuModel
     {
         [Key]

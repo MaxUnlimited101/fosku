@@ -10,6 +10,10 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Reflection.Metadata.Ecma335;
 using System.Security.Claims;
 using System.Text;
+using fosku_server.Services.Customers;
+using fosku_server.Services.Auth;
+using fosku_server.Helpers;
+using fosku_server.Helpers.Validation;
 
 namespace fosku_server
 {
@@ -21,17 +25,15 @@ namespace fosku_server
 
             var builder = WebApplication.CreateBuilder(args);
 
-            ConfigureServices(builder.Services, builder.Configuration);
+            ConfigureServices(builder);
 
-            AddAuthentitication(builder);
+            var app = ConfigureMiddleware(builder);
 
-            var app = builder.Build();
-
-            ConfigureMiddleware(app);
-
-            ConfigureEndpoints(app);
+            //ConfigureEndpoints(app); // ?
 
             ApplyMigrations(app);
+
+            app.MapControllers();
 
             app.Run();
         }
@@ -106,7 +108,7 @@ namespace fosku_server
 
             app.MapGet("/categories", async (AppDbContext db) => await db.Categories.ToListAsync());
 
-            app.MapPost("/categories", async (Category category, AppDbContext db) => 
+            app.MapPost("/categories", async (Category category, AppDbContext db) =>
             {
                 var handle = db.Categories.Add(category);
                 await db.SaveChangesAsync();
@@ -189,7 +191,7 @@ namespace fosku_server
         private static void AddAuthentitication(WebApplicationBuilder builder)
         {
             // Add JWT authentication services
-            var key = Encoding.ASCII.GetBytes(Env.GetString("JWT_SECRET_KEY")); 
+            var key = Encoding.ASCII.GetBytes(Env.GetString("JWT_SECRET_KEY"));
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -207,9 +209,13 @@ namespace fosku_server
             });
         }
 
-        private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        private static void ConfigureServices(WebApplicationBuilder builder)
         {
-            services.AddCors(options =>
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddControllers();
+            AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
+            builder.Services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
                 {
@@ -219,21 +225,69 @@ namespace fosku_server
                 });
             });
 
-            services.AddDbContext<AppDbContext>(options =>
+            builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseNpgsql(Env.GetString("ConnectionStrings__DefaultConnection")));
 
-            services.AddAuthentication();
-            services.AddAuthorization();
+            //builder.Services.AddScheduler(); // ?
+            builder.Services.AddScoped<ICustomerService, CustomerService>();
+
+            //TODO: add all other services (for all other Models)
+
+            builder.Services.AddTransient<IAuthService, AuthService>();
+
+            builder.Services.AddMvc(opt =>
+            {
+                opt.Filters.Add<ValidationFilter>();
+            });
+
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(x =>
+                {
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.Events = new JwtBearerEvents
+                    {
+                        OnMessageReceived = context =>
+                        {
+                            context.Token = context.Request.Cookies["access_token"];
+                            return Task.CompletedTask;
+                        }
+                    };
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(AuthSettings.JWTPrivateKey)),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
+            builder.Services.AddAuthorization();
+
+            builder.Services.AddHttpLogging(options =>
+                {
+                    options.LoggingFields = HttpLoggingFields.All;
+                    options.RequestHeaders.Add("Referer");
+                    options.ResponseHeaders.Add("FoskuResponseHeader"); // ?
+                });
         }
 
-        private static void ConfigureMiddleware(WebApplication app)
+        private static WebApplication ConfigureMiddleware(WebApplicationBuilder builder)
         {
-            app.UseStaticFiles();
+            // app.UseStaticFiles();
+            // app.UseCors();
+            // app.UseAuthentication();
+            // app.UseAuthorization();
 
-            app.UseCors();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
+            var app = builder.Build();
+            {
+                app.UseHttpLogging();
+                app.UseHttpsRedirection();
+                app.UseRouting();
+                app.UseCors();
+                app.UseAuthentication();
+                app.UseAuthorization();
+            }
+            return app;
         }
 
         private static void ApplyMigrations(WebApplication app)

@@ -3,8 +3,8 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-# Env file
-*.env
+# Env file (I know it should ALWAYS be ignored, but this is a side project)
+#*.env
 
 # TEMP files
 *.TMP
