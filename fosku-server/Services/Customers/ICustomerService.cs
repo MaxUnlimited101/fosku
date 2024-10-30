@@ -1,11 +1,13 @@
-using fosku_server.Models;
+﻿using fosku_server.Models;
 
-namespace fosku_server.Services.Customers;
-
-public interface ICustomerService
+namespace fosku_server.Services.Customers
 {
-    Customer? GetCustomer(int Id);
-    Customer? GetCustomer(string Email);
-    void CreateCustomer(Customer customer);
-    void UpdateCustomer(Customer customer);
+    public interface ICustomerService
+    {
+        public void CreateCustomer(Customer customer);
+        public void UpdateCustomer(Customer customer);
+        public Customer? GetCustomer(int id);
+        public Customer? GetCustomer(string Email);
+
+    }
 }

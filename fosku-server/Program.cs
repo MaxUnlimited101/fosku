@@ -4,10 +4,16 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using fosku_server.Services.Customers;
 using fosku_server.Services.Auth;
 using fosku_server.Helpers;
 using fosku_server.Helpers.Validation;
+using fosku_server.Services.Customers;
+using fosku_server.Services.Orders;
+using fosku_server.Services.Categories;
+using fosku_server.Services.OrderItems;
+using fosku_server.Services.Products;
+using fosku_server.Services.ProductImages;
+using fosku_server.Services.Reviews;
 
 namespace fosku_server
 {
@@ -74,9 +80,17 @@ namespace fosku_server
 
             //builder.Services.AddScheduler(); // ?
             builder.Services.AddScoped<ICustomerService, CustomerService>();
+            builder.Services.AddScoped<ICategoryService, CategoryService>();
+            builder.Services.AddScoped<IOrderService, OrderService>();
+            builder.Services.AddScoped<IOrderItemService, OrderItemService>();
+            builder.Services.AddScoped<IProductService, ProductService>();
+            builder.Services.AddScoped<IProductImageService, ProductImageService>();
+            builder.Services.AddScoped<IReviewService, ReviewService>();
 
             //TODO: add all other services (for all other Models)
-            throw new Exception("Not all services addded");
+            //TODO: add DELETE for Category, Product, ProdcutImage, ...??
+            //TODO: add testing
+            throw new Exception("Not done yet");
 
             builder.Services.AddTransient<IAuthService, AuthService>();
 

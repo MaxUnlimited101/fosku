@@ -22,21 +22,21 @@ public class CustomerService : ICustomerService
         _context.Customers.Add(customer);
         _context.SaveChangesAsync();
     }
-    
+
 
     public Customer? GetCustomer(int id)
     {
         var customersQuery = from customers in _context.Customers
-                        where customers.Id == id
-                        select customers;
+                             where customers.Id == id
+                             select customers;
         Customer? Customer = customersQuery.FirstOrDefault();
         return Customer;
     }
     public Customer? GetCustomer(string Email)
     {
         var customersQuery = from customers in _context.Customers
-                        where customers.Email == Email
-                        select customers;
+                             where customers.Email == Email
+                             select customers;
         Customer? Customer = customersQuery.FirstOrDefault();
         return Customer;
     }

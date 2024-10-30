@@ -5,8 +5,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-//TODO: decide if i wanna add reviews
-
 namespace fosku_server.Models
 {
     public class Review : IFoskuModel
@@ -14,7 +12,7 @@ namespace fosku_server.Models
         [Key]
         public int Id { get; set; }
         [Required]
-        public int UserId { get; set; }
+        public int CustomerId { get; set; }
         public Customer Customer { get; set; }
         [Required]
         public int ProductId { get; set; }
