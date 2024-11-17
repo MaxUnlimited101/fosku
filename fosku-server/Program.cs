@@ -14,6 +14,7 @@ using fosku_server.Services.OrderItems;
 using fosku_server.Services.Products;
 using fosku_server.Services.ProductImages;
 using fosku_server.Services.Reviews;
+using fosku_server.Services.Managers;
 
 namespace fosku_server
 {
@@ -86,8 +87,8 @@ namespace fosku_server
             builder.Services.AddScoped<IProductService, ProductService>();
             builder.Services.AddScoped<IProductImageService, ProductImageService>();
             builder.Services.AddScoped<IReviewService, ReviewService>();
+            builder.Services.AddScoped<IManagerService, ManagerService>();
 
-            //TODO: add all other services (for all other Models)
             //TODO: add DELETE for Category, Product, ProdcutImage, ...??
             //TODO: add testing
             throw new Exception("Not done yet");

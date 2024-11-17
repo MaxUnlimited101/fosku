@@ -39,6 +39,13 @@ let sampleProducts = [
     image: "https://via.placeholder.com/150",
     description: "Budget-friendly but high value.",
   },
+  {
+    id: 6,
+    name: "Product 6",
+    price: 111.99,
+    image: "https://via.placeholder.com/150",
+    description: "desc 6",
+  },
 ];
 
 // Product Item Component
@@ -94,16 +101,6 @@ const Pagination = ({ totalPages, currentPage, setCurrentPage }) => (
 
 // Main Products Page Component
 const ProductsPage = () => {
-  for (let i = 6; i < 20; i++) {
-    sampleProducts.push({
-      id: i,
-      name: `Product ${i}`,
-      price: i + 14.99,
-      image: "https://via.placeholder.com/150",
-      description: `Description ${i - 5}`,
-    });
-  }
-
   const [products, setProducts] = useState(sampleProducts);
   const [sortBy, setSortBy] = useState("default");
   const [currentPage, setCurrentPage] = useState(1);

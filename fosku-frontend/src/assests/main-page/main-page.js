@@ -2,18 +2,22 @@
 import React from "react";
 import "./main-page.css";
 import PageWrapper from "../page-wrapper/page-wrapper";
+import { useNavigate } from "react-router-dom";
 
 // Components
 
-const HeroSection = () => (
-  <section className="hero">
-    <div className="hero-content">
-      <h2>Welcome to Our Shop</h2>
-      <p>Find the best products at unbeatable prices!</p>
-      <button>Shop Now</button>
-    </div>
-  </section>
-);
+const HeroSection = () => {
+  const navigate = useNavigate();
+  return (
+    <section className="hero">
+      <div className="hero-content">
+        <h2>Welcome to Our Shop</h2>
+        <p>Find the best products at unbeatable prices!</p>
+        <button onClick={_ => navigate('/products')}>Shop Now</button>
+      </div>
+    </section>
+  );
+}
 
 const ProductCategories = () => (
   <section className="categories">

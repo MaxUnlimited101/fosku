@@ -30,7 +30,7 @@ namespace fosku_server.Controllers
             {
                 return NotFound();
             }
-            var response 
+            return Ok(customer);
         }
     }
 }
