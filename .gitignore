@@ -6,6 +6,8 @@
 # Env file (I know it should ALWAYS be ignored, but this is a side project)
 #*.env
 
+.DS_Store
+
 # TEMP files
 *.TMP
 

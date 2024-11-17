@@ -41,6 +41,13 @@ let sampleProducts = [
     image: "https://via.placeholder.com/150",
     description: "Budget-friendly but high value.",
   },
+  {
+    id: 6,
+    name: "Product 6",
+    price: 111.99,
+    image: "https://via.placeholder.com/150",
+    description: "desc 6",
+  },
 ];
 
 // Product Item Component
