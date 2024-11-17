@@ -1,0 +1,1 @@
+export const backend_server_url = "http://localhost:8080";

@@ -23,14 +23,14 @@ namespace fosku_server.Controllers
         [HttpGet]
         [Authorize]
         [TypeFilter(typeof(CheckTokenClaimsFilter))]
-        public IActionResult GetCustomerInfo(int CustomerId)
+        public IActionResult GetCustomer(int CustomerId)
         {
             Customer? customer = customerService.GetCustomer(CustomerId);
             if (customer == null)
             {
                 return NotFound();
             }
-            var response 
+            return Ok(customer);
         }
     }
 }

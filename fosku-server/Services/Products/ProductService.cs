@@ -30,5 +30,10 @@ namespace fosku_server.Services.Products
         {
             _context.Products.Update(product);
         }
+
+        public List<Product> GetProducts()
+        {
+            return _context.Products.ToList();
+        }
     }
 }

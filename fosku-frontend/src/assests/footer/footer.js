@@ -7,7 +7,7 @@ export const Footer = () => (
       <div className="social-links">
         <a href="#facebook">Facebook</a>
         <a href="#instagram">Instagram</a>
-        <a href="#twitter">Twitter</a>
+        <a href="#X">X</a>
         <Link to="/admin">For admins</Link>
       </div>
     </footer>

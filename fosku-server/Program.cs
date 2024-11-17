@@ -14,6 +14,7 @@ using fosku_server.Services.OrderItems;
 using fosku_server.Services.Products;
 using fosku_server.Services.ProductImages;
 using fosku_server.Services.Reviews;
+using Microsoft.AspNetCore.HttpLogging;
 
 namespace fosku_server
 {
@@ -38,29 +39,15 @@ namespace fosku_server
             app.Run();
         }
 
-        // private static void AddAuthentitication(WebApplicationBuilder builder)
-        // {
-        //     // Add JWT authentication services
-        //     var key = Encoding.ASCII.GetBytes(Env.GetString("JWT_SECRET_KEY"));
-        //     builder.Services.AddAuthentication(options =>
-        //     {
-        //         options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-        //         options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        //     })
-        //     .AddJwtBearer(options =>
-        //     {
-        //         options.TokenValidationParameters = new TokenValidationParameters
-        //         {
-        //             ValidateIssuerSigningKey = true,
-        //             IssuerSigningKey = new SymmetricSecurityKey(key),
-        //             ValidateIssuer = false,
-        //             ValidateAudience = false
-        //         };
-        //     });
-        // }
-
         private static void ConfigureServices(WebApplicationBuilder builder)
         {
+            builder.Services.AddHttpLogging(options =>
+            {
+                options.LoggingFields = HttpLoggingFields.All;
+                options.RequestHeaders.Add("Referer");
+                options.ResponseHeaders.Add("FoskuResponseHeader"); // TODO: change this?
+            });
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddControllers();
             AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
@@ -89,8 +76,7 @@ namespace fosku_server
 
             //TODO: add all other services (for all other Models)
             //TODO: add DELETE for Category, Product, ProdcutImage, ...??
-            //TODO: add testing
-            throw new Exception("Not done yet");
+            //TODO: add unit testing ??
 
             builder.Services.AddTransient<IAuthService, AuthService>();
 
@@ -121,21 +107,10 @@ namespace fosku_server
                     };
                 });
             builder.Services.AddAuthorization();
-
-            builder.Services.AddHttpLogging(options =>
-                {
-                    options.LoggingFields = HttpLoggingFields.All;
-                    options.RequestHeaders.Add("Referer");
-                    options.ResponseHeaders.Add("FoskuResponseHeader"); // ?
-                });
         }
 
         private static WebApplication ConfigureMiddleware(WebApplicationBuilder builder)
         {
-            // app.UseStaticFiles();
-            // app.UseCors();
-            // app.UseAuthentication();
-            // app.UseAuthorization();
 
             var app = builder.Build();
             {

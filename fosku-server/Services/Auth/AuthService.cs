@@ -24,7 +24,7 @@ public class AuthService : IAuthService
                 new Claim("userId", person.Id.ToString())
             ]
             ),
-            Expires = DateTime.UtcNow.AddDays(15),
+            Expires = DateTime.UtcNow.AddDays(1),
             SigningCredentials = credentials
         };
 

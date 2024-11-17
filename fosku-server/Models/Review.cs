@@ -13,15 +13,15 @@ namespace fosku_server.Models
         public int Id { get; set; }
         [Required]
         public int CustomerId { get; set; }
-        public Customer Customer { get; set; }
+        public Customer Customer { get; set; } = null!;
         [Required]
         public int ProductId { get; set; }
-        public Product Product { get; set; }
+        public Product Product { get; set; } = null!;
         [Required]
         [Range(1, 5, MaximumIsExclusive = false, MinimumIsExclusive = false)]
         public int Rating { get; set; }
         [MaxLength(400)]
-        public string Comment { get; set; }
+        public string Comment { get; set; } = null!;
         [Required]
         public DateOnly CreatedAt { get; set; }
     }

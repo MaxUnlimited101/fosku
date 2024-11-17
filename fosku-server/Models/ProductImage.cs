@@ -15,12 +15,12 @@ namespace fosku_server.Models
         [Key]
         public int Id { get; set; }
         [MaxLength(100)]
-        public string ImageUrl { get; set; }
+        public string ImageUrl { get; set; } = null!;
         [Required]
         [MaxLength(100)]
-        public string AltText { get; set; }
+        public string AltText { get; set; } = null!;
         [Required]
         public int ProductId { get; set; }
-        public Product Product { get; set; }
+        public Product Product { get; set; } = null!;
     }
 }

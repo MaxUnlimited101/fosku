@@ -14,13 +14,13 @@ namespace fosku_server.Models
 
         [Required]
         [MaxLength(100)]
-        public string Name { get; set; }
-        
+        public string Name { get; set; } = null!;
+
         [MaxLength(400)]
-        public string Description { get; set; }
+        public string Description { get; set; } = null!;
 
         public int ParentCategoryId { get; set; }
 
-        public Category ParentCategory { get; set; }
+        public Category ParentCategory { get; set; } = null!;
     }
 }

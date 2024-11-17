@@ -8,26 +8,23 @@ public abstract class Person : IFoskuModel
     public int Id { get; set; }
 
     [MaxLength(100)]
-    public string FirstName { get; set; }
+    public string FirstName { get; set; } = null!;
 
     [MaxLength(100)]
-    public string LastName { get; set; }
+    public string LastName { get; set; } = null!;
 
     [Required]
     [MaxLength(100)]
-    public string Email { get; set; }
-
-    /// <summary>
-    /// SHA256 hash
-    /// </summary>
-    [Required]
-    [MaxLength(50)]
-    public string PasswordHash { get; set; }
+    public string Email { get; set; } = null!;
 
     [Required]
     [MaxLength(50)]
-    public string SaltString { get; set; }
+    public string PasswordHash { get; set; } = null!;
+
+    [Required]
+    [MaxLength(50)]
+    public string SaltString { get; set; } = null!;
 
     [MaxLength(20)]
-    public string PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; } = null!;
 }

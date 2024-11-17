@@ -20,13 +20,13 @@ namespace fosku_server.Models
         public int TotalAmount { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        public int CustomerId { get; set; }
 
-        public Customer Customer { get; set; }
+        public Customer Customer { get; set; } = null!;
 
         [Required]
         [MaxLength(200)]
-        public string ShippingAddress { get; set; }
+        public string ShippingAddress { get; set; } = null!;
 
         [Required]
         public OrderStatusEnum OrderStatus { get; set; }

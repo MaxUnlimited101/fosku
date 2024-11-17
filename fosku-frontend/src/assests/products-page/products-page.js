@@ -1,6 +1,8 @@
 // ProductsPage.js
 import React, { useState, useEffect } from "react";
 import PageWrapper from "../page-wrapper/page-wrapper";
+import { useNavigate } from "react-router-dom";
+import './products-page.css'
 
 // Sample product data (Replace this with actual API data)
 let sampleProducts = [
@@ -42,15 +44,18 @@ let sampleProducts = [
 ];
 
 // Product Item Component
-const ProductItem = ({ product }) => (
-  <div className="product-item">
-    <img src={product.image} alt={product.name} />
-    <h3>{product.name}</h3>
-    <p>{product.description}</p>
-    <span>${product.price.toFixed(2)}</span>
-    <button>Add to Cart</button>
-  </div>
-);
+const ProductItem = ({ product }) => {
+  const navigate = useNavigate();
+  return (
+    <div className="product-item">
+      <img onClick={_ => navigate(`/products/${product.id}`)} src={product.image} alt={product.name} />
+      <h3 onClick={_ => navigate(`/products/${product.id}`)} >{product.name}</h3>
+      <p>{product.description}</p>
+      <span>${product.price.toFixed(2)} </span>
+      <button>Add to Cart</button>
+    </div>
+  );
+};
 
 // Product Grid Component
 const ProductGrid = ({ products }) => (
@@ -94,16 +99,6 @@ const Pagination = ({ totalPages, currentPage, setCurrentPage }) => (
 
 // Main Products Page Component
 const ProductsPage = () => {
-  for (let i = 6; i < 20; i++) {
-    sampleProducts.push({
-      id: i,
-      name: `Product ${i}`,
-      price: i + 14.99,
-      image: "https://via.placeholder.com/150",
-      description: `Description ${i - 5}`,
-    });
-  }
-
   const [products, setProducts] = useState(sampleProducts);
   const [sortBy, setSortBy] = useState("default");
   const [currentPage, setCurrentPage] = useState(1);
