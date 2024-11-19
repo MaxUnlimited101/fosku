@@ -15,5 +15,13 @@ public record CreateProductRequest(
     float Price,
 
     [Range(0, int.MaxValue)]
-    int StockQuantity
+    int StockQuantity,
+
+    [MaxLength(200)]
+    string LogoUrl,
+
+    [MaxLength(100)]
+    string AltText,
+
+    List<Models.ProductImage> ProductImages
 );

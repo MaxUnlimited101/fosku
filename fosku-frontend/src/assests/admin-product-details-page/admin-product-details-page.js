@@ -18,6 +18,8 @@ export default function AdminProductDetailsPage() {
     setProduct(product);
   }, [product]);
 
+  
+
   if (error) {
     return (
       <div className="error-message">
@@ -104,6 +106,8 @@ export default function AdminProductDetailsPage() {
             value={productChanged.stockQuantity}
             onChange={onChangeHandler}
           />
+
+          
 
           <button type="submit" name="btnUpdate" className="btn-update">
             Update Product

@@ -42,10 +42,10 @@ namespace fosku_server.Controllers
         //TODO: add auth logic
         [HttpPost]
         [Route("/product")]
-        public ActionResult CreateProduct([FromBody] CreateProductRequest productRequest)
+        public ActionResult CreateProduct([FromBody] CreateProductRequest request)
         {
             Product product = new ();
-            (product.Name, product.Description, product.Price, product.StockQuantity) = productRequest;
+            (product.Name, product.Description, product.Price, product.StockQuantity, product.LogoUrl, product.AltText, product.ProductImages) = request;
             productService.CreateProduct(product);
             return Created();
         }
@@ -55,7 +55,7 @@ namespace fosku_server.Controllers
         public ActionResult UpdateProduct([FromBody] UpdateOrInsertProductRequest request)
         {
             Product product = new ();
-            (product.Id, product.Name, product.Description, product.Price, product.StockQuantity) = request;
+            (product.Id, product.Name, product.Description, product.Price, product.StockQuantity, product.LogoUrl, product.AltText, product.ProductImages) = request;
             productService.UpdateProduct(product);
             return Ok();
         }

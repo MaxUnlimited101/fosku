@@ -18,6 +18,10 @@ namespace fosku_server.Models
         public string Description { get; set; } = null!;
         public float Price { get; set; }
         public int StockQuantity { get; set; }
+        [MaxLength(200)]
+        public string LogoUrl { get; set; } = null!;
+        [MaxLength(100)]
+        public string AltText { get; set; } = null!;
         public List<ProductImage> ProductImages { get; set; } = null!;
     }
 }

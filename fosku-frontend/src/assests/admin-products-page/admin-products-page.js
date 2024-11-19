@@ -25,7 +25,9 @@ export function AdminPageProductComponent({ product }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(productChanged),
-      }).then(_ => alert("Success!")).catch(_ => alert("Error! Something went wrong!"));
+      })
+        .catch((_) => alert("Error! Something went wrong!"))
+        .then((_) => alert("Success!"));
     } else if (e.nativeEvent.submitter.name === "btnDelete") {
       if (
         window.confirm(
@@ -38,7 +40,9 @@ export function AdminPageProductComponent({ product }) {
             "Content-Type": "application/json",
           },
           body: `${productChanged.id}`,
-        }).then(_ => alert("Success!")).catch(_ => alert("Error! Something went wrong!"));
+        })
+          .catch((_) => alert("Error! Something went wrong!"))
+          .then((_) => alert("Success!"));
       } else {
         return;
       }
@@ -126,6 +130,20 @@ export default function AdminProductsPage() {
     stockQuantity: "",
   });
 
+  const uploadEndpoint = `${backend_server_url}/productImage`;
+  const [logo, setLogo] = useState({});
+  const [logoPreviewUrl, setLogoPreviewUrl] = useState("");
+
+  // Handle image selection
+  const handleImageSelection = (event) => {
+    const selectedFile = event.target.files[0];
+
+    setLogo(selectedFile);
+
+    const newPreviews = selectedFiles.map((file) => URL.createObjectURL(file));
+    setPreviewUrls([...previewUrls, ...newPreviews]);
+  };
+
   const onChangeHandler = (e) => {
     setNewProduct((prev) => ({
       ...prev,
@@ -142,7 +160,9 @@ export default function AdminProductsPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newProduct),
-    }).then(_ => alert("Success!")).catch(_ => alert("Error! Something went wrong!"));
+    })
+      .then((_) => alert("Success!"))
+      .catch((_) => alert("Error! Something went wrong!"));
   };
 
   if (error) {
@@ -211,6 +231,21 @@ export default function AdminProductsPage() {
               value={newProduct.stockQuantity}
               onChange={onChangeHandler}
             />
+
+            <label htmlFor="logoUrl">Logo:</label>
+            <img
+              src={`${backend_server_url}/images/${newProduct.logoUrl}`}
+              alt={newProduct.altText}
+            />
+            <input
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleImageSelection}
+            />
+            <input type="text" name="logoAltText" onChange={onChangeHandler}>
+              Logo alt text
+            </input>
 
             <button type="submit" className="btn-create">
               Save New Product
