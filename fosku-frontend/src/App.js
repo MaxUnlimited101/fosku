@@ -26,6 +26,7 @@ function App() {
           <Route path="admin/dashboard" element={<AdminDashboardPage />} />
           <Route path="admin/products" element={<AdminProductsPage />} />
           <Route path="admin/orders" element={<AdminOrdersPage />} />
+          <Route path="admin/products/create" element={<AdminProductsPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

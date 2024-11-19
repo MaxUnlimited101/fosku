@@ -8,5 +8,7 @@ namespace fosku_server.Services.Products
         public void CreateProduct(Product product);
         public void UpdateProduct(Product product);
         public List<Product> GetProducts();
+        public void DeleteProduct(Product product);
+        public void DeleteProductById(int id);
     }
 }

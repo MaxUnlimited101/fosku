@@ -16,8 +16,5 @@ public record UpdateOrInsertProductRequest(
     float Price,
 
     [Range(0, int.MaxValue)]
-    int StockQuantity,
-
-    [Range(0, int.MaxValue)]
-    int CategoryId
+    int StockQuantity
 );

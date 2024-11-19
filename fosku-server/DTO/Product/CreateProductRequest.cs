@@ -15,8 +15,5 @@ public record CreateProductRequest(
     float Price,
 
     [Range(0, int.MaxValue)]
-    int StockQuantity,
-
-    [Range(0, int.MaxValue)]
-    int CategoryId
+    int StockQuantity
 );
