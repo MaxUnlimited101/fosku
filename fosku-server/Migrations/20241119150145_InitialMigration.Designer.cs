@@ -12,7 +12,7 @@ using fosku_server.Data;
 namespace fosku_server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241117150151_InitialMigration")]
+    [Migration("20241119150145_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -262,8 +262,8 @@ namespace fosku_server.Migrations
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("integer");

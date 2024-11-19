@@ -17,6 +17,9 @@ export default function AdminNavbarComponent() {
         <Link to="/" className="navbar-button">
           Home
         </Link>
+        <Link to={-1} className="navbar-button">
+          Go back
+        </Link>
         <button onClick={handleSignOut} className="navbar-button signout-btn">
           Sign Out
         </button>

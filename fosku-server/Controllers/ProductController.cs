@@ -27,8 +27,8 @@ namespace fosku_server.Controllers
         }
 
         [HttpGet]
-        [Route("/product")]
-        public ActionResult GetProduct([FromQuery]int id)
+        [Route("/product/{id}")]
+        public ActionResult GetProduct([FromRoute]int id)
         {
             //TODO: check id properly ??
             Product? product = productService.GetProduct(id);

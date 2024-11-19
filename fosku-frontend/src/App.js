@@ -11,6 +11,7 @@ import ProductDetailsPage from './assests/product-details-page/product-details-p
 import AdminDashboardPage from './assests/admin-dashboard-page/admin-dashboard-page';
 import AdminProductsPage from './assests/admin-products-page/admin-products-page';
 import AdminOrdersPage from './assests/admin-orders-page/admin-orders-page';
+import AdminProductDetailsPage from './assests/admin-product-details-page/admin-product-details-page';
 
 function App() {
   return (
@@ -22,11 +23,14 @@ function App() {
           <Route path="products/:id" element={<ProductDetailsPage />} />
           <Route path="contact" element={<ContactPage />} />
           <Route path="about" element={<AboutUsPage />} />
+
           <Route path="admin" element={<AdminPage />} />
           <Route path="admin/dashboard" element={<AdminDashboardPage />} />
           <Route path="admin/products" element={<AdminProductsPage />} />
+          <Route path="admin/products/:id" element={<AdminProductDetailsPage />} />
           <Route path="admin/orders" element={<AdminOrdersPage />} />
           <Route path="admin/products/create" element={<AdminProductsPage />} />
+
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>

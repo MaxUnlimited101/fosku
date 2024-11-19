@@ -118,7 +118,7 @@ namespace fosku_server.Migrations
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    ImageUrl = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    ImageUrl = table.Column<string>(type: "character varying(500)", maxLength: 500, nullable: false),
                     AltText = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     ProductId = table.Column<int>(type: "integer", nullable: false)
                 },

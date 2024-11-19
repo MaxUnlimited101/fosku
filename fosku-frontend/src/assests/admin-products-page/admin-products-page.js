@@ -1,11 +1,13 @@
-import "./admin-products-page.css"; // Add necessary styles for better appearance
+import "./admin-products-page.css";
 import { backend_server_url } from "../../settings";
 import { useState } from "react";
 import useSWR from "swr";
 import AdminNavbarComponent from "../admin-navbar/admin-navbar";
+import { useNavigate } from "react-router-dom";
 
 export function AdminPageProductComponent({ product }) {
   const [productChanged, setProduct] = useState(product);
+  const navigate = useNavigate();
 
   const onChangeHandler = (e) => {
     setProduct((prev) => ({
@@ -23,7 +25,7 @@ export function AdminPageProductComponent({ product }) {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(productChanged),
-      });
+      }).then(_ => alert("Success!")).catch(_ => alert("Error! Something went wrong!"));
     } else if (e.nativeEvent.submitter.name === "btnDelete") {
       if (
         window.confirm(
@@ -36,7 +38,7 @@ export function AdminPageProductComponent({ product }) {
             "Content-Type": "application/json",
           },
           body: `${productChanged.id}`,
-        });
+        }).then(_ => alert("Success!")).catch(_ => alert("Error! Something went wrong!"));
       } else {
         return;
       }
@@ -96,6 +98,13 @@ export function AdminPageProductComponent({ product }) {
         <button type="submit" name="btnDelete" className="btn-delete">
           Delete Product
         </button>
+        <button
+          type="button"
+          className="btn-details"
+          onClick={(_) => navigate(`/admin/products/${product.id}`)}
+        >
+          View details
+        </button>
       </form>
     </div>
   );
@@ -133,7 +142,7 @@ export default function AdminProductsPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(newProduct),
-    });
+    }).then(_ => alert("Success!")).catch(_ => alert("Error! Something went wrong!"));
   };
 
   if (error) {
@@ -147,7 +156,7 @@ export default function AdminProductsPage() {
   if (isValidating) {
     return (
       <div className="loading-message">
-        <p>Loading...</p>
+        <p>Loading... (if loading is too long, try reloading the page)</p>
       </div>
     );
   }

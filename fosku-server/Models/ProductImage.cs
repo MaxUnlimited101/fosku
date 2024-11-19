@@ -14,7 +14,7 @@ namespace fosku_server.Models
     {
         [Key]
         public int Id { get; set; }
-        [MaxLength(100)]
+        [MaxLength(500)]
         public string ImageUrl { get; set; } = null!;
         [Required]
         [MaxLength(100)]
