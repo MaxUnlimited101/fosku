@@ -11,7 +11,7 @@ export default function AdminNavbarComponent() {
   return (
     <nav className="navbar">
       <div className="navbar-logo">
-        <Link to="/">MyShop</Link>
+        <Link to="/">ShopLogo</Link>
       </div>
       <div className="navbar-links">
         <Link to="/" className="navbar-button">

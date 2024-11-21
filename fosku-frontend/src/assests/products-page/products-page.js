@@ -6,46 +6,27 @@ import { backend_server_url } from "../../settings";
 
 const ProductItem = ({ product }) => {
   const navigate = useNavigate();
+
   return (
     <div className="product-card">
-
-      <h4>{product.name}</h4>
-      <p>{product.description}</p>
-
-      <label htmlFor="price">Price:</label>
-      <input
-        className="input-readonly"
-        readOnly
-        name="price"
-        type="number"
-        step={0.01}
-        value={product.price}
-      />
-
-      <label htmlFor="stockQuantity">Stock Quantity:</label>
-      <input
-        className="input-readonly"
-        readOnly
-        name="stockQuantity"
-        type="number"
-        min="0"
-        step="1"
-        value={product.stockQuantity}
-      />
-
       <img
         src={`${backend_server_url}${product.logoUrl}`}
         alt={product.altText}
-        style={{ width: "150px", height: "150px" }}
+        className="product-card__image"
       />
-
-      <button
-        type="button"
-        className="btn-details"
-        onClick={(_) => navigate(`/admin/products/${product.id}`)}
-      >
-        View details
-      </button>
+      <div className="product-card__content">
+        <h4 className="product-card__title">{product.name}</h4>
+        <p className="product-card__description">{product.description}</p>
+        <p className="product-card__price">{product.price}$</p>
+        <p className="product-card__stock">In stock: {product.stockQuantity}</p>
+        {/* <button
+          type="button"
+          className="product-card__button"
+          onClick={(_) => navigate(`/admin/products/${product.id}`)}
+        >
+          Add to Cart
+        </button> */}
+      </div>
     </div>
   );
 };

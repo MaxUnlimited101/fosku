@@ -1,9 +1,7 @@
-// ContactsPage.js
 import React, { useState } from "react";
 import "./contacts-page.css";
 import PageWrapper from "../page-wrapper/page-wrapper";
 
-// Contact Form Component
 const ContactForm = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -95,7 +93,6 @@ const ContactInfo = () => (
   </div>
 );
 
-// Map or Social Links (Optional)
 const SocialLinks = () => (
   <div className="social-links">
     <h3>Follow Us</h3>
@@ -116,7 +113,6 @@ const SocialLinks = () => (
   </div>
 );
 
-// Contacts Page Component
 const ContactPage = () => {
   return (
     <PageWrapper>
@@ -125,13 +121,13 @@ const ContactPage = () => {
           <h1>Contact Us</h1>
         </header>
         <section className="contact-section">
-          <div className="contact-form-wrapper">
+          {/* <div className="contact-form-wrapper">
             <h2>Get in Touch</h2>
             <ContactForm />
-          </div>
+          </div> */}
           <div className="contact-info-wrapper">
             <ContactInfo />
-            <SocialLinks />
+            {/* <SocialLinks /> */}
           </div>
         </section>
       </div>

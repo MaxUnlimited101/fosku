@@ -16,6 +16,7 @@ using fosku_server.Services.ProductImages;
 using fosku_server.Services.Reviews;
 using Microsoft.AspNetCore.HttpLogging;
 using fosku_server.Services.Managers;
+using fosku_server.Models;
 
 namespace fosku_server
 {
@@ -36,6 +37,8 @@ namespace fosku_server
             ApplyMigrations(app);
 
             app.MapControllers();
+
+            GenerateRootManager(app);
 
             app.Run();
         }
@@ -131,6 +134,22 @@ namespace fosku_server
             {
                 var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
                 dbContext.Database.Migrate();
+            }
+        }
+
+        private static void GenerateRootManager(WebApplication app)
+        {
+            using var scope = app.Services.CreateScope();
+            IManagerService managerService = scope.ServiceProvider.GetRequiredService<IManagerService>();
+
+            if (managerService.GetManager("root") == null)
+            {
+                Manager root = new();
+                root.Email = "root";
+                root.FirstName = "root";
+                root.LastName = "root";
+                root.PasswordHash = Env.GetString("ROOT_MANAGER_PASSWORD");
+                managerService.CreateManager(root);
             }
         }
     }

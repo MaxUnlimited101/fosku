@@ -20,7 +20,7 @@ body {
 .product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
+  gap: 10px;
 }
 
 .product-item {
@@ -62,4 +62,88 @@ body {
 .pagination button.active {
   background-color: #007bff;
   color: white;
+}
+
+/* Container for the card */
+.product-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 170px;
+  padding: 20px;
+  margin: 10px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hover effect */
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Product image */
+.product-card__image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+
+/* Content container */
+.product-card__content {
+  text-align: center;
+}
+
+/* Title styling */
+.product-card__title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin: 10px 0;
+  color: #333;
+}
+
+/* Description styling */
+.product-card__description {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+/* Price styling */
+.product-card__price {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #28a745;
+  margin-bottom: 5px;
+}
+
+/* Stock info */
+.product-card__stock {
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 15px;
+}
+
+/* Button styling */
+.product-card__button {
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #ffffff;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* Button hover effect */
+.product-card__button:hover {
+  background-color: #0056b3;
 }

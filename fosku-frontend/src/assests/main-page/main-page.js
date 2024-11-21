@@ -6,15 +6,17 @@ import { useNavigate } from "react-router-dom";
 
 // Components
 
-const HeroSection = () => (
-  <section className="hero">
+const HeroSection = () => {
+  const navigate = useNavigate();
+  return (<section className="hero">
     <div className="hero-content">
       <h2>Welcome to Our Shop</h2>
       <p>Find the best products at unbeatable prices!</p>
-      <button>Shop Now</button>
+      <button onClick={_ => navigate("/products")}>Shop Now</button>
     </div>
   </section>
 );
+}
 
 const ProductCategories = () => (
   <section className="categories">
@@ -61,8 +63,8 @@ const MainPage = () => {
     <PageWrapper>
       <div className="main-page">
         <HeroSection />
-        <ProductCategories />
-        <FeaturedProducts />
+        {/*<ProductCategories />
+        <FeaturedProducts /> */}
       </div>
     </PageWrapper>
   );

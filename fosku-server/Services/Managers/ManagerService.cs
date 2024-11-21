@@ -20,7 +20,7 @@ public class ManagerService : IManagerService
         manager.SaltString = Convert.ToBase64String(saltBytes);
         manager.PasswordHash = hashPassword;
         _context.Managers.Add(manager);
-        _context.SaveChangesAsync();
+        _context.SaveChanges();
     }
 
 

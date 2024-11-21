@@ -18,13 +18,13 @@ public abstract class Person : IFoskuModel
     public string Email { get; set; } = null!;
 
     [Required]
-    [MaxLength(50)]
+    [MaxLength(200)]
     public string PasswordHash { get; set; } = null!;
 
     [Required]
-    [MaxLength(50)]
+    [MaxLength(200)]
     public string SaltString { get; set; } = null!;
 
     [MaxLength(20)]
-    public string PhoneNumber { get; set; } = null!;
+    public string? PhoneNumber { get; set; } = null!;
 }

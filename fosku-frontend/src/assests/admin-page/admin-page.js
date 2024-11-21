@@ -1,31 +1,75 @@
-import { useState } from 'react';
-import './admin-page.css'
-import { backend_server_url } from '../../settings';
-import { useNavigate } from 'react-router-dom';
+import "./admin-page.css";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import AdminNavbarComponent from "../admin-navbar/admin-navbar";
+import { backend_server_url } from "../../settings";
 
 export default function AdminPage() {
-    const navigate = useNavigate();
-    const [login, setLogin] = useState({});
-    const submitHandler = (e) => {
-        e.preventDefault()
+  const navigate = useNavigate();
+  const [login, setLogin] = useState({});
 
-        //TODO: add auth logic
+  const submitHandler = async (e) => {
+    e.preventDefault();
 
-        navigate("/admin/dashboard")
+    try {
+      const response = await fetch(`${backend_server_url}/manager/login`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(login),
+      });
+
+      if (!response.ok) {
+        throw new Error("Login failed");
+      }
+
+      const { Token } = await response.json();
+      localStorage.setItem("jwt", Token);
+      //alert("Login successful!");
+      navigate("/admin/dashboard");
+    } catch (err) {
+      //setError(err.message);
     }
+  };
 
-    const onChangeHandler = (e) => {
-        setLogin(prev => { return { ...prev, [e.target.name]: e.target.value } })
-    }
+  const onChangeHandler = (e) => {
+    setLogin((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
-    return (
-        <div>
-            <form onSubmit={submitHandler} method='post'>
-                <h2>Log in to the CMS</h2>
-                <input name='email' type="email" placeholder='Email...' value={login.email} onChange={onChangeHandler} />
-                <input name='password' type='password' placeholder='Password...' value={login.password} onChange={onChangeHandler} />
-                <button type='submit'>Log in</button>
-            </form>
-        </div>
-    );
+  return (
+    <div>
+      <AdminNavbarComponent />
+      <div className="login-container">
+        <form onSubmit={submitHandler} className="login-form">
+          <h2 className="login-form__title">Log in to the CMS</h2>
+          <div className="form-group">
+            <input
+              name="email"
+              type="text"
+              placeholder="Email..."
+              value={login.email || ""}
+              onChange={onChangeHandler}
+              className="form-input"
+              required
+            />
+          </div>
+          <div className="form-group">
+            <input
+              name="password"
+              type="password"
+              placeholder="Password..."
+              value={login.password || ""}
+              onChange={onChangeHandler}
+              className="form-input"
+              required
+            />
+          </div>
+          <button type="submit" className="login-form__button">
+            Log in
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }

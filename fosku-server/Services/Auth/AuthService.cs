@@ -21,10 +21,10 @@ public class AuthService : IAuthService
         {
             Subject = new ClaimsIdentity(
             [
-                new Claim("userId", person.Id.ToString())
+                new Claim("personEmail", person.Email.ToString())
             ]
             ),
-            Expires = DateTime.UtcNow.AddDays(1),
+            Expires = DateTime.UtcNow.AddHours(9),
             SigningCredentials = credentials
         };
 
@@ -39,7 +39,7 @@ public class AuthService : IAuthService
 
         var jwtToken = tokenHandler.ReadJwtToken(token);
         var claims = jwtToken.Claims;
-        var UserIdString = claims.FirstOrDefault(claim => claim.Type == "userId")?.Value;
+        var UserIdString = claims.FirstOrDefault(claim => claim.Type == "personEmail")?.Value;
 
         return UserIdString ?? string.Empty;
     }

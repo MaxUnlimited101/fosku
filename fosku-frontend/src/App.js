@@ -27,7 +27,7 @@ function App() {
           <Route path="admin" element={<AdminPage />} />
           <Route path="admin/dashboard" element={<AdminDashboardPage />} />
           <Route path="admin/products" element={<AdminProductsPage />} />
-          <Route path="admin/products/:id" element={<AdminProductDetailsPage />} />
+          {/* <Route path="admin/products/:id" element={<AdminProductDetailsPage />} /> */}
           <Route path="admin/orders" element={<AdminOrdersPage />} />
 
           <Route path="*" element={<NotFoundPage />} />
