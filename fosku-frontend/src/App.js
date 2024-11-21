@@ -29,7 +29,6 @@ function App() {
           <Route path="admin/products" element={<AdminProductsPage />} />
           <Route path="admin/products/:id" element={<AdminProductDetailsPage />} />
           <Route path="admin/orders" element={<AdminOrdersPage />} />
-          <Route path="admin/products/create" element={<AdminProductsPage />} />
 
           <Route path="*" element={<NotFoundPage />} />
         </Route>

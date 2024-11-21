@@ -12,7 +12,7 @@ using fosku_server.Data;
 namespace fosku_server.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20241119154101_InitialMigration")]
+    [Migration("20241121170330_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -226,15 +226,15 @@ namespace fosku_server.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AltText")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("character varying(100)");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
                         .HasColumnType("character varying(1000)");
+
+                    b.Property<string>("LogoAltText")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("character varying(100)");
 
                     b.Property<string>("LogoUrl")
                         .IsRequired()
@@ -363,7 +363,7 @@ namespace fosku_server.Migrations
             modelBuilder.Entity("fosku_server.Models.ProductImage", b =>
                 {
                     b.HasOne("fosku_server.Models.Product", "Product")
-                        .WithMany("ProductImages")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -388,11 +388,6 @@ namespace fosku_server.Migrations
                     b.Navigation("Customer");
 
                     b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("fosku_server.Models.Product", b =>
-                {
-                    b.Navigation("ProductImages");
                 });
 #pragma warning restore 612, 618
         }

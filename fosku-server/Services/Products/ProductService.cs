@@ -25,7 +25,7 @@ namespace fosku_server.Services.Products
         public void CreateProduct(Product product)
         {
             _context.Products.Add(product);
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public void UpdateProduct(Product product)

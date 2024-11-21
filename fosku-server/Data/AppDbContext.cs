@@ -18,13 +18,13 @@ namespace fosku_server.Data
 
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Product>()
-                .HasMany(p => p.ProductImages)
-                .WithOne(pi => pi.Product) 
-                .HasForeignKey(pi => pi.ProductId) 
-                .OnDelete(DeleteBehavior.Cascade);
-        }
+        // protected override void OnModelCreating(ModelBuilder modelBuilder)
+        // {
+        //     modelBuilder.Entity<Product>()
+        //         .HasMany(p => p.ProductImages)
+        //         .WithOne(pi => pi.Product) 
+        //         .HasForeignKey(pi => pi.ProductId) 
+        //         .OnDelete(DeleteBehavior.Cascade);
+        // }
     }
 }

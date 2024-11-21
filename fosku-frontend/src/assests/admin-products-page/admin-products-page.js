@@ -1,147 +1,133 @@
 import "./admin-products-page.css";
 import { backend_server_url } from "../../settings";
-import { useState } from "react";
-import useSWR from "swr";
+import { useEffect, useState } from "react";
 import AdminNavbarComponent from "../admin-navbar/admin-navbar";
 import { useNavigate } from "react-router-dom";
 
 export function AdminPageProductComponent({ product }) {
-  const [productChanged, setProduct] = useState(product);
   const navigate = useNavigate();
-
-  const onChangeHandler = (e) => {
-    setProduct((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const onSubmit = (e) => {
-    e.preventDefault();
-    if (e.nativeEvent.submitter.name === "btnUpdate") {
-      fetch(`${backend_server_url}/product`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(productChanged),
-      })
-        .catch((_) => alert("Error! Something went wrong!"))
-        .then((_) => alert("Success!"));
-    } else if (e.nativeEvent.submitter.name === "btnDelete") {
-      if (
-        window.confirm(
-          "Are you sure you want to DELETE this product? This action is irreversible!"
-        )
-      ) {
-        fetch(`${backend_server_url}/product`, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: `${productChanged.id}`,
-        })
-          .catch((_) => alert("Error! Something went wrong!"))
-          .then((_) => alert("Success!"));
-      } else {
-        return;
-      }
-    }
-  };
 
   return (
     <div className="product-card">
-      <form onSubmit={onSubmit}>
-        <label htmlFor="id">ID:</label>
-        <input
-          name="id"
-          type="text"
-          readOnly
-          value={productChanged.id}
-          className="input-readonly"
-        />
+      <label htmlFor="id">ID:</label>
+      <input
+        name="id"
+        type="text"
+        readOnly
+        className="input-readonly"
+        value={product.id}
+      />
 
-        <label htmlFor="name">Name:</label>
-        <input
-          name="name"
-          type="text"
-          value={productChanged.name}
-          onChange={onChangeHandler}
-        />
+      <label htmlFor="name">Name:</label>
+      <input
+        readOnly
+        name="name"
+        type="text"
+        value={product.name}
+        className="input-readonly"
+      />
 
-        <label htmlFor="description">Description:</label>
-        <input
-          name="description"
-          type="text"
-          value={productChanged.description}
-          onChange={onChangeHandler}
-        />
+      <label htmlFor="description">Description:</label>
+      <input
+        className="input-readonly"
+        readOnly
+        name="description"
+        type="text"
+        value={product.description}
+      />
 
-        <label htmlFor="price">Price:</label>
-        <input
-          name="price"
-          type="number"
-          step={0.01}
-          value={productChanged.price}
-          onChange={onChangeHandler}
-        />
+      <label htmlFor="price">Price:</label>
+      <input
+        className="input-readonly"
+        readOnly
+        name="price"
+        type="number"
+        step={0.01}
+        value={product.price}
+      />
 
-        <label htmlFor="stockQuantity">Stock Quantity:</label>
-        <input
-          name="stockQuantity"
-          type="number"
-          min="0"
-          step="1"
-          value={productChanged.stockQuantity}
-          onChange={onChangeHandler}
-        />
+      <label htmlFor="stockQuantity">Stock Quantity:</label>
+      <input
+        className="input-readonly"
+        readOnly
+        name="stockQuantity"
+        type="number"
+        min="0"
+        step="1"
+        value={product.stockQuantity}
+      />
 
-        <button type="submit" name="btnUpdate" className="btn-update">
-          Update Product
-        </button>
-        <button type="submit" name="btnDelete" className="btn-delete">
-          Delete Product
-        </button>
-        <button
-          type="button"
-          className="btn-details"
-          onClick={(_) => navigate(`/admin/products/${product.id}`)}
-        >
-          View details
-        </button>
-      </form>
+      <label htmlFor="logoUrl">Logo:</label>
+      <img
+        src={`${backend_server_url}${product.logoUrl}`}
+        alt={product.altText}
+        style={{ width: "150px", height: "150px" }}
+      />
+      <label htmlFor="logoAltText">Logo alt text</label>
+      <input
+        className="input-readonly"
+        readOnly
+        type="text"
+        name="logoAltText"
+        value={product.logoAltText}
+      />
+
+      <button
+        type="button"
+        className="btn-details"
+        onClick={(_) => navigate(`/admin/products/${product.id}`)}
+      >
+        View details
+      </button>
     </div>
   );
 }
 
-const fetcher = (url) => fetch(url).then((res) => res.json());
-
 export default function AdminProductsPage() {
-  const {
-    data: products,
-    error,
-    isValidating,
-  } = useSWR(`${backend_server_url}/products`, fetcher);
+  const [error, setError] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [isValidating, setIsValidating] = useState(true);
 
-  const [newProduct, setNewProduct] = useState({
-    name: "",
-    description: "",
-    price: "",
-    stockQuantity: "",
-  });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${backend_server_url}/products`);
+        if (!response.ok) {
+          setError("Failed to fetch!");
+          return;
+        }
+        const result = await response.json();
+        setProducts(result);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsValidating(false);
+      }
+    };
 
-  const uploadEndpoint = `${backend_server_url}/productImage`;
-  const [logo, setLogo] = useState({});
+    fetchData();
+  }, []); // executes this once
+
+  const [newProduct, setNewProduct] = useState({});
+  const [logo, setLogo] = useState();
   const [logoPreviewUrl, setLogoPreviewUrl] = useState("");
 
-  // Handle image selection
+  useEffect(() => {
+    if (logo) {
+      if (logoPreviewUrl) {
+        URL.revokeObjectURL(logoPreviewUrl);
+      }
+      const newPreviewUrl = URL.createObjectURL(logo);
+      setLogoPreviewUrl(newPreviewUrl);
+      return () => {
+        URL.revokeObjectURL(newPreviewUrl);
+      };
+    }
+  }, [logo]);
+
   const handleImageSelection = (event) => {
     const selectedFile = event.target.files[0];
-
     setLogo(selectedFile);
-
-    const newPreviews = selectedFiles.map((file) => URL.createObjectURL(file));
-    setPreviewUrls([...previewUrls, ...newPreviews]);
   };
 
   const onChangeHandler = (e) => {
@@ -151,18 +137,28 @@ export default function AdminProductsPage() {
     }));
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
 
-    fetch(`${backend_server_url}/product`, {
+    const newId = await fetch(`${backend_server_url}/product`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "content-type": "application/json",
       },
       body: JSON.stringify(newProduct),
-    })
-      .then((_) => alert("Success!"))
-      .catch((_) => alert("Error! Something went wrong!"));
+    }).then((res) => res.json());
+
+    console.log(newId);
+
+    const data = new FormData();
+    data.append("logoImage", logo);
+
+    await fetch(`${backend_server_url}/image/${newId}`, {
+      method: "POST",
+      body: data,
+    });
+
+    //window.location.reload();
   };
 
   if (error) {
@@ -202,6 +198,7 @@ export default function AdminProductsPage() {
               type="text"
               value={newProduct.name}
               onChange={onChangeHandler}
+              required
             />
 
             <label htmlFor="description">Description:</label>
@@ -220,6 +217,7 @@ export default function AdminProductsPage() {
               min={0}
               value={newProduct.price}
               onChange={onChangeHandler}
+              required
             />
 
             <label htmlFor="stockQuantity">Stock Quantity:</label>
@@ -230,22 +228,22 @@ export default function AdminProductsPage() {
               step="1"
               value={newProduct.stockQuantity}
               onChange={onChangeHandler}
+              required
             />
 
-            <label htmlFor="logoUrl">Logo:</label>
+            <label htmlFor="logoUrl">Logo (should be 150x150 px):</label>
             <img
-              src={`${backend_server_url}/images/${newProduct.logoUrl}`}
+              src={logoPreviewUrl}
               alt={newProduct.altText}
+              style={{ width: "150px", height: "150px" }}
             />
             <input
               type="file"
               accept="image/*"
-              multiple
               onChange={handleImageSelection}
             />
-            <input type="text" name="logoAltText" onChange={onChangeHandler}>
-              Logo alt text
-            </input>
+            <label htmlFor="logoAltText">Logo alt text</label>
+            <input type="text" name="logoAltText" onChange={onChangeHandler} />
 
             <button type="submit" className="btn-create">
               Save New Product

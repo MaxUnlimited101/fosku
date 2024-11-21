@@ -1,70 +1,55 @@
-// ProductsPage.js
 import React, { useState, useEffect } from "react";
 import PageWrapper from "../page-wrapper/page-wrapper";
 import { useNavigate } from "react-router-dom";
-import './products-page.css'
+import "./products-page.css";
+import { backend_server_url } from "../../settings";
 
-// Sample product data (Replace this with actual API data)
-let sampleProducts = [
-  {
-    id: 1,
-    name: "Product 1",
-    price: 29.99,
-    image: "https://via.placeholder.com/150",
-    description: "This is a great product.",
-  },
-  {
-    id: 2,
-    name: "Product 2",
-    price: 49.99,
-    image: "https://via.placeholder.com/150",
-    description: "An amazing product for everyone.",
-  },
-  {
-    id: 3,
-    name: "Product 3",
-    price: 79.99,
-    image: "https://via.placeholder.com/150",
-    description: "High quality and affordable.",
-  },
-  {
-    id: 4,
-    name: "Product 4",
-    price: 99.99,
-    image: "https://via.placeholder.com/150",
-    description: "Best in its category.",
-  },
-  {
-    id: 5,
-    name: "Product 5",
-    price: 19.99,
-    image: "https://via.placeholder.com/150",
-    description: "Budget-friendly but high value.",
-  },
-  {
-    id: 6,
-    name: "Product 6",
-    price: 111.99,
-    image: "https://via.placeholder.com/150",
-    description: "desc 6",
-  },
-];
-
-// Product Item Component
 const ProductItem = ({ product }) => {
   const navigate = useNavigate();
   return (
-    <div className="product-item">
-      <img onClick={_ => navigate(`/products/${product.id}`)} src={product.image} alt={product.name} />
-      <h3 onClick={_ => navigate(`/products/${product.id}`)} >{product.name}</h3>
+    <div className="product-card">
+
+      <h4>{product.name}</h4>
       <p>{product.description}</p>
-      <span>${product.price.toFixed(2)} </span>
-      <button>Add to Cart</button>
+
+      <label htmlFor="price">Price:</label>
+      <input
+        className="input-readonly"
+        readOnly
+        name="price"
+        type="number"
+        step={0.01}
+        value={product.price}
+      />
+
+      <label htmlFor="stockQuantity">Stock Quantity:</label>
+      <input
+        className="input-readonly"
+        readOnly
+        name="stockQuantity"
+        type="number"
+        min="0"
+        step="1"
+        value={product.stockQuantity}
+      />
+
+      <img
+        src={`${backend_server_url}${product.logoUrl}`}
+        alt={product.altText}
+        style={{ width: "150px", height: "150px" }}
+      />
+
+      <button
+        type="button"
+        className="btn-details"
+        onClick={(_) => navigate(`/admin/products/${product.id}`)}
+      >
+        View details
+      </button>
     </div>
   );
 };
 
-// Product Grid Component
 const ProductGrid = ({ products }) => (
   <div className="product-grid">
     {products.map((product) => (
@@ -73,7 +58,6 @@ const ProductGrid = ({ products }) => (
   </div>
 );
 
-// Filter and Sort Component
 const FilterSort = ({ setSortBy }) => {
   return (
     <div className="filter-sort">
@@ -89,7 +73,6 @@ const FilterSort = ({ setSortBy }) => {
   );
 };
 
-// Pagination Component
 const Pagination = ({ totalPages, currentPage, setCurrentPage }) => (
   <div className="pagination">
     {Array.from({ length: totalPages }, (_, index) => (
@@ -104,14 +87,35 @@ const Pagination = ({ totalPages, currentPage, setCurrentPage }) => (
   </div>
 );
 
-// Main Products Page Component
 const ProductsPage = () => {
-  const [products, setProducts] = useState(sampleProducts);
+  const [error, setError] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [isValidating, setIsValidating] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${backend_server_url}/products`);
+        if (!response.ok) {
+          setError("Failed to fetch!");
+          return;
+        }
+        const result = await response.json();
+        setProducts(result);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setIsValidating(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const [sortBy, setSortBy] = useState("default");
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 4;
 
-  // Sort products based on selected sort criteria
   useEffect(() => {
     let sortedProducts = [...products];
 
@@ -135,7 +139,22 @@ const ProductsPage = () => {
     setProducts(sortedProducts);
   }, [sortBy]);
 
-  // Pagination logic
+  if (error) {
+    return (
+      <div className="error-message">
+        <h3>Server is down!</h3>
+      </div>
+    );
+  }
+
+  if (isValidating) {
+    return (
+      <div className="loading-message">
+        <p>Loading... (if loading is too long, try reloading the page)</p>
+      </div>
+    );
+  }
+
   const indexOfLastProduct = currentPage * productsPerPage;
   const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
   const currentProducts = products.slice(

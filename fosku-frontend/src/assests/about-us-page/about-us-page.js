@@ -107,7 +107,6 @@ const AboutUsPage = () => {
         <section className="about-us-content">
           <CompanyOverview />
           <MissionValues />
-          <Team />
         </section>
       </div>
     </PageWrapper>

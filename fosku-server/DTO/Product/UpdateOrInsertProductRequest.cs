@@ -5,25 +5,23 @@ namespace fosku_server.DTO.Product;
 
 public record UpdateOrInsertProductRequest(
     [Range(0, int.MaxValue)]
-    int Id,
+    int id,
 
     [MaxLength(100)]
-    string Name,
+    string name,
 
     [MaxLength(1000)]
-    string Description,
+    string description,
 
     [Range(0, float.MaxValue)]
-    float Price,
+    float price,
 
     [Range(0, int.MaxValue)]
-    int StockQuantity,
+    int stockQuantity,
 
     [MaxLength(200)]
-    string LogoUrl,
+    string logoUrl,
 
     [MaxLength(100)]
-    string AltText,
-
-    List<Models.ProductImage> ProductImages
+    string logoAltText
 );

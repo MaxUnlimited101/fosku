@@ -84,7 +84,7 @@ namespace fosku_server.Migrations
                     Price = table.Column<float>(type: "real", nullable: false),
                     StockQuantity = table.Column<int>(type: "integer", nullable: false),
                     LogoUrl = table.Column<string>(type: "character varying(200)", maxLength: 200, nullable: false),
-                    AltText = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    LogoAltText = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
                 },
                 constraints: table =>
                 {

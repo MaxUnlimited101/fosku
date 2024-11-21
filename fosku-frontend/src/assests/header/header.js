@@ -14,10 +14,6 @@ export const Header = () => (
           <li><Link to="/about">About Us</Link></li>
         </ul>
       </nav>
-      <div className="search-bar">
-        <input type="text" placeholder="Search products..." />
-        <button>Search</button>
-      </div>
     </header>
   );
 

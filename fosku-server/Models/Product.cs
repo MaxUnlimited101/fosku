@@ -21,7 +21,7 @@ namespace fosku_server.Models
         [MaxLength(200)]
         public string LogoUrl { get; set; } = null!;
         [MaxLength(100)]
-        public string AltText { get; set; } = null!;
-        public List<ProductImage> ProductImages { get; set; } = null!;
+        public string LogoAltText { get; set; } = null!;
+        //public List<ProductImage> ProductImages { get; set; } = null!;
     }
 }

@@ -6,22 +6,20 @@ namespace fosku_server.DTO.Product;
 
 public record CreateProductRequest(
     [MaxLength(100)]
+    [Required]
     string Name,
 
     [MaxLength(1000)]
+    [Required]
     string Description,
 
     [Range(0, float.MaxValue)]
+    [Required]
     float Price,
 
     [Range(0, int.MaxValue)]
     int StockQuantity,
 
-    [MaxLength(200)]
-    string LogoUrl,
-
     [MaxLength(100)]
-    string AltText,
-
-    List<Models.ProductImage> ProductImages
+    string LogoAltText
 );
