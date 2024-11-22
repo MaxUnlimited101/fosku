@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./admin-product-details-page.css";
 import { backend_server_url } from "../../settings";
 import { useEffect, useState } from "react";
@@ -8,6 +8,8 @@ export default function AdminProductDetailsPage() {
   const { id } = useParams();
   const [error, setError] = useState(null);
   const [isValidating, setIsValidating] = useState(true);
+  const [productChanged, setProduct] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,9 +29,7 @@ export default function AdminProductDetailsPage() {
     };
 
     fetchData();
-  }, []); // executes this once
-
-  const [productChanged, setProduct] = useState();
+  }, [id]);
 
   const onChangeHandler = (e) => {
     setProduct((prev) => ({
@@ -40,16 +40,17 @@ export default function AdminProductDetailsPage() {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("jwt");
+
     if (e.nativeEvent.submitter.name === "btnUpdate") {
       fetch(`${backend_server_url}/product`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
         },
         body: JSON.stringify(productChanged),
-      })
-        .catch((_) => alert("Error! Something went wrong!"))
-        .then((_) => alert("Success!"));
+      }).then(_ => window.location.reload());
     } else if (e.nativeEvent.submitter.name === "btnDelete") {
       if (
         window.confirm(
@@ -60,13 +61,10 @@ export default function AdminProductDetailsPage() {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
           },
-          body: `${productChanged.id}`,
-        })
-          .catch((_) => alert("Error! Something went wrong!"))
-          .then((_) => alert("Success!"));
-      } else {
-        return;
+          body: JSON.stringify({ id: productChanged.id }),
+        }).then(_ => navigate("/admin/products/"));
       }
     }
   };
@@ -82,7 +80,7 @@ export default function AdminProductDetailsPage() {
   if (isValidating) {
     return (
       <div className="loading-message">
-        <p>Loading... (if loading is too long, try reloading the page)</p>
+        <p>Loading... (if loading takes too long, try reloading the page)</p>
       </div>
     );
   }
@@ -90,73 +88,93 @@ export default function AdminProductDetailsPage() {
   return (
     <div>
       <AdminNavbarComponent />
-      <div className="product-card">
-        <form onSubmit={onSubmit}>
-          <label htmlFor="id">ID:</label>
-          <input
-            name="id"
-            type="text"
-            readOnly
-            value={productChanged.id}
-            className="input-readonly"
-          />
+      <div className="admin-product-details-page">
+        <h1>Product Details</h1>
+        <div className="product-card">
+          <form onSubmit={onSubmit}>
+            <div className="form-group">
+              <label htmlFor="id">ID (not changable):</label>
+              <input
+                name="id"
+                type="text"
+                readOnly
+                value={productChanged.id}
+                className="input-readonly"
+              />
+            </div>
 
-          <label htmlFor="name">Name:</label>
-          <input
-            name="name"
-            type="text"
-            value={productChanged.name}
-            onChange={onChangeHandler}
-          />
+            <div className="form-group">
+              <label htmlFor="name">Name:</label>
+              <input
+                name="name"
+                type="text"
+                value={productChanged.name}
+                onChange={onChangeHandler}
+              />
+            </div>
 
-          <label htmlFor="description">Description:</label>
-          <input
-            name="description"
-            type="text"
-            value={productChanged.description}
-            onChange={onChangeHandler}
-          />
+            <div className="form-group">
+              <label htmlFor="description">Description:</label>
+              <textarea
+                name="description"
+                value={productChanged.description}
+                onChange={onChangeHandler}
+              />
+            </div>
 
-          <label htmlFor="price">Price:</label>
-          <input
-            name="price"
-            type="number"
-            step={0.01}
-            value={productChanged.price}
-            onChange={onChangeHandler}
-          />
+            <div className="form-group">
+              <label htmlFor="price">Price:</label>
+              <input
+                name="price"
+                type="number"
+                step="0.01"
+                value={productChanged.price}
+                onChange={onChangeHandler}
+              />
+            </div>
 
-          <label htmlFor="stockQuantity">Stock Quantity:</label>
-          <input
-            name="stockQuantity"
-            type="number"
-            min="0"
-            step="1"
-            value={productChanged.stockQuantity}
-            onChange={onChangeHandler}
-          />
+            <div className="form-group">
+              <label htmlFor="stockQuantity">Stock Quantity:</label>
+              <input
+                name="stockQuantity"
+                type="number"
+                min="0"
+                step="1"
+                value={productChanged.stockQuantity}
+                onChange={onChangeHandler}
+              />
+            </div>
 
-          <label htmlFor="logoUrl">Logo (should be 150x150 px):</label>
-          <img
-            src={`${backend_server_url}${productChanged.logoUrl}`}
-            alt={productChanged.altText}
-            style={{ width: "150px", height: "150px" }}
-          />
-          <label htmlFor="logoAltText">Logo alt text</label>
-          <input
-            type="text"
-            name="logoAltText"
-            onChange={onChangeHandler}
-            value={productChanged.logoAltText}
-          />
+            <div className="form-group">
+              <label htmlFor="logoUrl">Logo (150x150 px):</label>
+              <div className="image-preview">
+                <img
+                  src={`${backend_server_url}${productChanged.logoUrl}`}
+                  alt={productChanged.altText}
+                />
+              </div>
+            </div>
 
-          <button type="submit" name="btnUpdate" className="btn-update">
-            Update Product
-          </button>
-          <button type="submit" name="btnDelete" className="btn-delete">
-            Delete Product
-          </button>
-        </form>
+            <div className="form-group">
+              <label htmlFor="logoAltText">Logo Alt Text:</label>
+              <input
+                type="text"
+                name="logoAltText"
+                onChange={onChangeHandler}
+                value={productChanged.logoAltText}
+              />
+            </div>
+
+            <div className="form-buttons">
+              <button type="submit" name="btnUpdate" className="btn-update">
+                Update Product
+              </button>
+              <button type="submit" name="btnDelete" className="btn-delete">
+                Delete Product
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   );

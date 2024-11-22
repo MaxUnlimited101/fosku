@@ -2,6 +2,7 @@
 using fosku_server.Models;
 using fosku_server.Services.Auth;
 using fosku_server.Services.Products;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.ComponentModel.DataAnnotations;
@@ -46,9 +47,9 @@ namespace fosku_server.Controllers
             return Ok(product);
         }
 
-        //TODO: add auth logic
         [HttpPost]
         [Route("/product")]
+        [Authorize]
         public ActionResult CreateProduct([FromBody] CreateProductRequest request)
         {
             Product product = new();
@@ -60,6 +61,7 @@ namespace fosku_server.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [Route("/image/{id}")]
         public ActionResult CreateImage([FromForm] IFormFile logoImage, [FromRoute] int id)
         {
@@ -92,6 +94,7 @@ namespace fosku_server.Controllers
         }
 
         [HttpPut]
+        [Authorize]
         [Route("/product")]
         public ActionResult UpdateProduct([FromBody] UpdateOrInsertProductRequest request)
         {
@@ -102,11 +105,12 @@ namespace fosku_server.Controllers
         }
 
         [HttpDelete]
+        [Authorize]
         [Route("/product")]
-        public ActionResult DeleteProduct([FromBody] int id)
+        public ActionResult DeleteProduct([FromBody] DeleteProductRequest request)
         {
-            System.Console.WriteLine($"Deleting Product by id: {id}");
-            productService.DeleteProductById(id);
+            System.Console.WriteLine($"Deleting Product by id: {request.Id}");
+            productService.DeleteProductById(request.Id);
             return Ok();
         }
     }

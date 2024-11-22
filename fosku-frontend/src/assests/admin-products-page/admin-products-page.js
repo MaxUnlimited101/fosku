@@ -9,76 +9,26 @@ export function AdminPageProductComponent({ product }) {
 
   return (
     <div className="product-card">
-      <label htmlFor="id">ID:</label>
-      <input
-        name="id"
-        type="text"
-        readOnly
-        className="input-readonly"
-        value={product.id}
-      />
-
-      <label htmlFor="name">Name:</label>
-      <input
-        readOnly
-        name="name"
-        type="text"
-        value={product.name}
-        className="input-readonly"
-      />
-
-      <label htmlFor="description">Description:</label>
-      <input
-        className="input-readonly"
-        readOnly
-        name="description"
-        type="text"
-        value={product.description}
-      />
-
-      <label htmlFor="price">Price:</label>
-      <input
-        className="input-readonly"
-        readOnly
-        name="price"
-        type="number"
-        step={0.01}
-        value={product.price}
-      />
-
-      <label htmlFor="stockQuantity">Stock Quantity:</label>
-      <input
-        className="input-readonly"
-        readOnly
-        name="stockQuantity"
-        type="number"
-        min="0"
-        step="1"
-        value={product.stockQuantity}
-      />
-
-      <label htmlFor="logoUrl">Logo:</label>
-      <img
-        src={`${backend_server_url}${product.logoUrl}`}
-        alt={product.altText}
-        style={{ width: "150px", height: "150px" }}
-      />
-      <label htmlFor="logoAltText">Logo alt text</label>
-      <input
-        className="input-readonly"
-        readOnly
-        type="text"
-        name="logoAltText"
-        value={product.logoAltText}
-      />
-
-      <button
-        type="button"
-        className="btn-details"
-        onClick={(_) => navigate(`/admin/products/${product.id}`)}
-      >
-        View details
-      </button>
+      <div className="product-image">
+        <img
+          src={`${backend_server_url}${product.logoUrl}`}
+          alt={product.altText}
+        />
+      </div>
+      <div className="product-info">
+        <h4>{product.name}</h4>
+        <p>Id: {product.id}</p>
+        <p>Description: {product.description}</p>
+        <p className="price">${product.price.toFixed(2)}</p>
+        <p className="stock">In Stock: {product.stockQuantity}</p>
+        <button
+          type="button"
+          className="btn-details"
+          onClick={() => navigate(`/admin/products/${product.id}`)}
+        >
+          View Details
+        </button>
+      </div>
     </div>
   );
 }
@@ -106,7 +56,7 @@ export default function AdminProductsPage() {
     };
 
     fetchData();
-  }, []); // executes this once
+  }, []);
 
   const [newProduct, setNewProduct] = useState({});
   const [logo, setLogo] = useState();
@@ -139,26 +89,29 @@ export default function AdminProductsPage() {
 
   const onSubmit = async (e) => {
     e.preventDefault();
+    const token = localStorage.getItem("jwt");
 
     const newId = await fetch(`${backend_server_url}/product`, {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        "Authorization": `Bearer ${token}`
       },
       body: JSON.stringify(newProduct),
     }).then((res) => res.json());
-
-    console.log(newId);
 
     const data = new FormData();
     data.append("logoImage", logo);
 
     await fetch(`${backend_server_url}/image/${newId}`, {
       method: "POST",
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
       body: data,
     });
 
-    //window.location.reload();
+    window.location.reload();
   };
 
   if (error) {
@@ -182,14 +135,13 @@ export default function AdminProductsPage() {
       <AdminNavbarComponent />
       <div className="admin-products-page">
         <h1>Admin Products Page</h1>
-
         <div className="products-grid">
           {products?.map((product) => (
             <AdminPageProductComponent key={product.id} product={product} />
           ))}
         </div>
 
-        <div className="product-card">
+        <div className="create-product-card">
           <h2>Create New Product</h2>
           <form onSubmit={onSubmit}>
             <label htmlFor="name">Name:</label>
@@ -202,9 +154,8 @@ export default function AdminProductsPage() {
             />
 
             <label htmlFor="description">Description:</label>
-            <input
+            <textarea
               name="description"
-              type="text"
               value={newProduct.description}
               onChange={onChangeHandler}
             />
@@ -232,17 +183,19 @@ export default function AdminProductsPage() {
             />
 
             <label htmlFor="logoUrl">Logo (should be 150x150 px):</label>
-            <img
-              src={logoPreviewUrl}
-              alt={newProduct.altText}
-              style={{ width: "150px", height: "150px" }}
-            />
+            {logoPreviewUrl && (
+              <img
+                src={logoPreviewUrl}
+                alt={newProduct.altText}
+                className="logo-preview"
+              />
+            )}
             <input
               type="file"
               accept="image/*"
               onChange={handleImageSelection}
             />
-            <label htmlFor="logoAltText">Logo alt text</label>
+            <label htmlFor="logoAltText">Logo Alt Text</label>
             <input type="text" name="logoAltText" onChange={onChangeHandler} />
 
             <button type="submit" className="btn-create">

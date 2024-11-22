@@ -20,14 +20,14 @@ function App() {
         <Route path="/">
           <Route index element={<MainPage />} />
           <Route path="products" element={<ProductsPage />} />
-          <Route path="products/:id" element={<ProductDetailsPage />} />
+          {/* <Route path="products/:id" element={<ProductDetailsPage />} /> */}
           <Route path="contact" element={<ContactPage />} />
           <Route path="about" element={<AboutUsPage />} />
 
           <Route path="admin" element={<AdminPage />} />
           <Route path="admin/dashboard" element={<AdminDashboardPage />} />
           <Route path="admin/products" element={<AdminProductsPage />} />
-          {/* <Route path="admin/products/:id" element={<AdminProductDetailsPage />} /> */}
+          <Route path="admin/products/:id" element={<AdminProductDetailsPage />} />
           <Route path="admin/orders" element={<AdminOrdersPage />} />
 
           <Route path="*" element={<NotFoundPage />} />

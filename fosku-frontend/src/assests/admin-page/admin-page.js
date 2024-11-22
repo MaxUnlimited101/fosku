@@ -24,12 +24,11 @@ export default function AdminPage() {
         throw new Error("Login failed");
       }
 
-      const { Token } = await response.json();
-      localStorage.setItem("jwt", Token);
-      //alert("Login successful!");
+      const { token } = await response.json();
+      localStorage.setItem("jwt", token);
       navigate("/admin/dashboard");
     } catch (err) {
-      //setError(err.message);
+      //TODO: do smth here
     }
   };
 

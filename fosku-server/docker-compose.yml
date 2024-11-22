@@ -33,6 +33,8 @@ services:
         restart: true
     networks:
       - fosku-network
+    volumes:
+      - server-volume:/images
 
 
 networks:
@@ -40,4 +42,5 @@ networks:
     driver: bridge
 
 volumes:
-  fosku-volume:    
+  fosku-volume:
+  server-volume:
